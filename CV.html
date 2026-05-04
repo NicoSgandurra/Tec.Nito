@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="executive">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nicolas Sgandurra - Resume</title>
+    <!-- Tailwind via CDN for layout utilities -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+           FONTS IMPORT
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        /* =========================================
+           THEME VARIABLES
+           ========================================= */
+
+        /* 1. EXECUTIVE THEME (New: Sleek, Professional, Perfect) */
+        :root,
+        [data-theme="executive"] {
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'Plus Jakarta Sans', sans-serif;
+
+            --bg-body-color: #f8fafc;
+            --bg-pattern: none;
+            --bg-pattern-size: auto;
+
+            --bg-card: #ffffff;
+            --bg-sidebar: #0f172a;
+            /* Deep Navy */
+
+            --text-title: #0f172a;
+            --text-main: #334155;
+            --text-muted: #64748b;
+
+            --sidebar-title: #ffffff;
+            --sidebar-main: #cbd5e1;
+            --sidebar-muted: #94a3b8;
+
+            --accent: #2563eb;
+            /* Professional Blue */
+            --accent-hover: #1d4ed8;
+
+            --border-color: #e2e8f0;
+            --sidebar-border: #1e293b;
+
+            --card-radius: 12px;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --card-border: 1px solid #e2e8f0;
+
+            --pill-bg: #f1f5f9;
+            --pill-text: #2563eb;
+            --pill-border: 1px solid #e2e8f0;
+            --pill-radius: 6px;
+
+            --timeline-dot-size: 10px;
+            --timeline-dot-radius: 50%;
+        }
+
+        /* 2. CUACKDERNOS THEME (Soft, clean, rounded, salmon accents) */
+        [data-theme="cuackdernos"] {
+            --font-main: 'Nunito', sans-serif;
+            --font-mono: 'Nunito', sans-serif;
+
+            --bg-body-color: #fff5f6;
+            --bg-pattern: radial-gradient(#fecdd3 2px, transparent 2px);
+            --bg-pattern-size: 24px 24px;
+
+            --bg-card: #ffffff;
+            --bg-sidebar: #ffffff;
+
+            --text-title: #111827;
+            --text-main: #374151;
+            --text-muted: #6b7280;
+
+            --sidebar-title: #111827;
+            --sidebar-main: #374151;
+            --sidebar-muted: #6b7280;
+
+            --accent: #fb7185;
+            --accent-hover: #e11d48;
+
+            --border-color: #fce7f3;
+            --sidebar-border: #fce7f3;
+
+            --card-radius: 24px;
+            --card-shadow: 0 10px 30px -5px rgba(251, 113, 133, 0.15);
+            --card-border: 1px solid #ffe4e6;
+
+            --pill-bg: #fff1f2;
+            --pill-text: #e11d48;
+            --pill-border: 1px solid #fecdd3;
+            --pill-radius: 9999px;
+
+            --timeline-dot-size: 12px;
+            --timeline-dot-radius: 50%;
+        }
+
+        /* 3. VERCEL / TECH THEME (Dark, sleek, sharp, high contrast) */
+        [data-theme="vercel"] {
+            --font-main: 'Inter', sans-serif;
+            --font-mono: 'Inter', monospace;
+
+            --bg-body-color: #000000;
+            --bg-pattern: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            --bg-pattern-size: 50px 50px;
+
+            --bg-card: #0a0a0a;
+            --bg-sidebar: #111111;
+
+            --text-title: #ededed;
+            --text-main: #a1a1aa;
+            --text-muted: #71717a;
+
+            --sidebar-title: #ededed;
+            --sidebar-main: #a1a1aa;
+            --sidebar-muted: #71717a;
+
+            --accent: #ffffff;
+            --accent-hover: #a1a1aa;
+
+            --border-color: #27272a;
+            --sidebar-border: #27272a;
+
+            --card-radius: 6px;
+            --card-shadow: 0 0 0 1px #27272a, 0 20px 40px rgba(0, 0, 0, 0.5);
+            --card-border: none;
+
+            --pill-bg: #18181b;
+            --pill-text: #ededed;
+            --pill-border: 1px solid #27272a;
+            --pill-radius: 4px;
+
+            --timeline-dot-size: 8px;
+            --timeline-dot-radius: 0px;
+        }
+
+        /* =========================================
+           CORE STYLES
+           ========================================= */
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body-color);
+            background-image: var(--bg-pattern);
+            background-size: var(--bg-pattern-size);
+            color: var(--text-main);
+            transition: background-color 0.4s ease, color 0.4s ease;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-mono-custom {
+            font-family: var(--font-mono);
+        }
+
+        /* HR Optimized Font Sizes for perfect 1-page fit */
+        .text-hr-body {
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .text-hr-sm {
+            font-size: 10.5px;
+        }
+
+        .cv-container {
+            width: 100%;
+            max-width: 210mm;
+            /* Exact A4 Width */
+            margin: 2rem auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .cv-container {
+                grid-template-columns: 31% 69%;
+                align-items: stretch;
+            }
+        }
+
+        /* Thematic Structural Classes */
+        .theme-card {
+            background-color: var(--bg-card);
+            border-radius: var(--card-radius);
+            box-shadow: var(--card-shadow);
+            border: var(--card-border);
+            padding: 2rem 1.8rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            /* Elegantly crops the top decorative border to the border-radius */
+        }
+
+        .theme-sidebar {
+            background-color: var(--bg-sidebar);
+            color: var(--sidebar-main);
+        }
+
+        .theme-sidebar .theme-title {
+            color: var(--sidebar-title);
+        }
+
+        .theme-sidebar .theme-muted {
+            color: var(--sidebar-muted);
+        }
+
+        .theme-sidebar .theme-border {
+            border-color: var(--sidebar-border);
+        }
+
+        .theme-title {
+            color: var(--text-title);
+        }
+
+        .theme-accent {
+            color: var(--accent);
+        }
+
+        .theme-border {
+            border-color: var(--border-color);
+        }
+
+        .theme-pill {
+            background-color: var(--pill-bg);
+            color: var(--pill-text);
+            border: var(--pill-border);
+            border-radius: var(--pill-radius);
+            padding: 0.15rem 0.6rem;
+            font-size: 10.5px;
+            font-weight: 700;
+            display: inline-block;
+            transition: all 0.3s;
+            letter-spacing: 0.02em;
+        }
+
+        .theme-timeline-item {
+            position: relative;
+            padding-left: 1.25rem;
+            margin-bottom: 1rem;
+            border-left: 2px solid var(--border-color);
+        }
+
+        .theme-timeline-dot {
+            position: absolute;
+            left: calc(-1px - (var(--timeline-dot-size) / 2));
+            top: 0.35rem;
+            width: var(--timeline-dot-size);
+            height: var(--timeline-dot-size);
+            background-color: var(--accent);
+            border-radius: var(--timeline-dot-radius);
+            border: 2px solid var(--bg-card);
+        }
+
+        /* Section Headings */
+        .section-heading {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text-title);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.35rem;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-sidebar .section-heading {
+            color: var(--sidebar-title);
+            border-bottom: 2px solid var(--sidebar-border);
+        }
+
+        /* =========================================
+           ANIMATIONS & HOVER EFFECTS (Web Only)
+           ========================================= */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media screen {
+            .animate-fade-up {
+                animation: fadeSlideUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+                opacity: 0;
+            }
+
+            .delay-100 {
+                animation-delay: 150ms;
+            }
+
+            .theme-pill:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+
+            .theme-timeline-dot {
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s;
+            }
+
+            .theme-timeline-item:hover .theme-timeline-dot {
+                transform: scale(1.4);
+            }
+
+            .fa-arrow-right {
+                transition: transform 0.3s ease;
+            }
+
+            a:hover .fa-arrow-right {
+                transform: translateX(3px);
+            }
+        }
+
+        /* =========================================
+           PRINT STYLES (The "HR Perfect PDF" Guarantee)
+           ========================================= */
+        @media print {
+            * {
+                transition: none !important;
+                animation: none !important;
+                transform: none !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            body {
+                background: var(--bg-body-color) !important;
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .cv-container {
+                margin: 0;
+                width: 210mm;
+                height: 297mm;
+                max-width: 100%;
+                gap: 0;
+                grid-template-columns: 31% 69%;
+                overflow: hidden;
+                /* Ensures it never spills to page 2 */
+            }
+
+            .theme-card {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                padding: 25px 22px !important;
+                height: 297mm !important;
+                box-sizing: border-box;
+            }
+
+            /* Print Theme Colors - Adapts to the active theme */
+            .theme-sidebar {
+                background-color: var(--bg-sidebar) !important;
+                color: var(--sidebar-main) !important;
+                border-right: 1px solid var(--border-color) !important;
+            }
+
+            .theme-sidebar .theme-title {
+                color: var(--sidebar-title) !important;
+            }
+
+            .theme-sidebar .theme-muted {
+                color: var(--sidebar-muted) !important;
+            }
+
+            .theme-card:not(.theme-sidebar) {
+                background-color: var(--bg-card) !important;
+                padding: 30px 25px !important;
+            }
+
+            .theme-title {
+                color: var(--text-title) !important;
+            }
+
+            body {
+                color: var(--text-main) !important;
+                font-family: var(--font-main) !important;
+            }
+
+            .theme-muted {
+                color: var(--text-muted) !important;
+            }
+
+            .theme-accent {
+                color: var(--accent) !important;
+            }
+
+            .theme-sidebar .theme-accent {
+                color: var(--accent) !important;
+            }
+
+            .theme-pill {
+                background-color: var(--pill-bg) !important;
+                border: var(--pill-border) !important;
+                color: var(--pill-text) !important;
+                border-radius: var(--pill-radius) !important;
+                font-weight: 600 !important;
+            }
+
+            .theme-timeline-item {
+                border-left-color: var(--border-color) !important;
+            }
+
+            .theme-timeline-dot {
+                background-color: var(--accent) !important;
+                border-radius: var(--timeline-dot-radius) !important;
+                border-color: var(--bg-card) !important;
+            }
+
+            /* Tighter spacing to guarantee 1 page */
+            .mb-6 {
+                margin-bottom: 1.1rem !important;
+            }
+
+            .mb-7 {
+                margin-bottom: 1.25rem !important;
+            }
+
+            .section-heading {
+                margin-bottom: 0.5rem !important;
+            }
+
+            .theme-timeline-item {
+                margin-bottom: 0.75rem !important;
+            }
+
+
+
+            ul.ml-4 {
+                margin-left: 1rem !important;
+            }
+
+            .gap-6 {
+                gap: 1rem !important;
+            }
+
+            .gap-5 {
+                gap: 1rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- UI / THEME SWITCHER -->
+    <div
+        class="no-print sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 p-4 shadow-sm flex flex-col md:flex-row justify-between items-center px-4 md:px-8 gap-4">
+        <div class="font-bold text-gray-800 flex items-center gap-2">
+            <i class="fa-solid fa-gem text-blue-600"></i> CV - Sgandurra, Nicolas
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-3">
+            <button onclick="setTheme('executive')" data-theme-btn="executive"
+                class="theme-btn ring-2 ring-blue-500 scale-105 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold py-1.5 px-4 rounded-md transition-all text-sm border border-blue-200 shadow-sm">
+                👔 Executive
+            </button>
+            <button onclick="setTheme('cuackdernos')" data-theme-btn="cuackdernos"
+                class="theme-btn opacity-70 hover:opacity-100 bg-rose-50 text-rose-600 font-bold py-1.5 px-4 rounded-full transition-all text-sm border border-rose-200 shadow-sm">
+                🐥 Cuackdernos
+            </button>
+            <button onclick="setTheme('vercel')" data-theme-btn="vercel"
+                class="theme-btn opacity-70 hover:opacity-100 bg-black text-white font-bold py-1.5 px-4 rounded-md transition-all text-sm border border-gray-800">
+                🖤 Tech/Dark
+            </button>
+        </div>
+
+        <button onclick="window.print()"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors shadow-md flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-file-pdf"></i> Save Perfect PDF
+        </button>
+    </div>
+
+    <!-- CV DOCUMENT -->
+    <div class="cv-container">
+
+        <!-- ================= SIDEBAR ================= -->
+        <aside class="theme-card theme-sidebar h-full animate-fade-up">
+            <div class="absolute top-0 left-0 w-full h-1.5" style="background-color: var(--accent);"></div>
+
+            <div class="text-center md:text-left mb-7 mt-2">
+                <h1 class="text-[2rem] font-extrabold theme-title leading-none mb-1 tracking-tight">Nicolas</h1>
+                <h1 class="text-[2rem] font-extrabold theme-accent leading-none mb-3 tracking-tight">Sgandurra</h1>
+                <p class="text-[10px] font-bold theme-muted uppercase tracking-widest font-mono-custom">
+                    Electromechanical Engineering Student</p>
+            </div>
+
+            <!-- Contact -->
+            <section class="mb-7">
+                <h2 class="section-heading"><i class="fa-regular fa-address-card theme-accent text-sm"></i> Contact</h2>
+                <ul class="space-y-3 text-hr-sm font-medium theme-title">
+                    <li class="flex items-center gap-3">
+                        <i class="fa-solid fa-envelope theme-accent w-4 text-center"></i>
+                        <a href="mailto:nico.sgandurra@gmail.com"
+                            class="hover:opacity-70 transition-opacity">nico.sgandurra@gmail.com</a>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fa-solid fa-phone theme-accent w-4 text-center"></i>
+                        <a href="tel:+5492604617198" class="hover:opacity-70 transition-opacity">+54 9 260 461-7198</a>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fa-solid fa-location-dot theme-accent w-4 text-center"></i>
+                        <span>San Rafael, Mendoza, AR</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fa-brands fa-github theme-accent w-4 text-center"></i>
+                        <a href="https://github.com/NicoSgandurra" target="_blank"
+                            class="hover:opacity-70 transition-opacity">github.com/NicoSgandurra</a>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fa-regular fa-calendar theme-accent w-4 text-center"></i>
+                        <span>24 Years Old</span>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Education -->
+            <section class="mb-7">
+                <h2 class="section-heading"><i class="fa-solid fa-graduation-cap theme-accent text-sm"></i> Education
+                </h2>
+                <div class="mb-4">
+                    <h3 class="font-bold theme-title text-[13px] leading-snug mb-0.5">Electromechanical Engineering</h3>
+                    <p class="text-[11px] font-mono-custom theme-accent font-bold mb-0.5">UTN - San Rafael</p>
+                    <p class="text-hr-sm theme-muted leading-tight">2021 – Expected: 2027<br>Advanced Student (5th Year)
+                    </p>
+                </div>
+                <div>
+                    <h3 class="font-bold theme-title text-[13px] leading-snug mb-0.5">Electrical Technician</h3>
+                    <p class="text-[11px] font-mono-custom theme-accent font-bold mb-0.5">Esc. 4-124 "Reynaldo Merín"
+                    </p>
+                    <p class="text-hr-sm theme-muted leading-tight">Graduated: 2020<br>Secondary Education Degree</p>
+                </div>
+            </section>
+
+            <!-- Languages -->
+            <section class="mb-7">
+                <h2 class="section-heading"><i class="fa-solid fa-language theme-accent text-sm"></i> Languages</h2>
+                <ul class="text-hr-sm font-medium space-y-2">
+                    <li class="flex justify-between items-center pb-2 border-b theme-border">
+                        <span class="theme-title">Spanish</span>
+                        <span class="theme-pill">Native</span>
+                    </li>
+                    <li class="flex justify-between items-center">
+                        <span class="theme-title">English</span>
+                        <span class="theme-pill opacity-80">B1 (Intermediate)</span>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Core Skills (Moved to Sidebar) -->
+            <section class="mb-7">
+                <h2 class="section-heading"><i class="fa-solid fa-bolt theme-accent text-sm"></i> Core Skills</h2>
+
+                <h3 class="font-bold text-[11.5px] theme-title mb-1.5">Technical Proficiency</h3>
+                <div class="flex flex-wrap gap-1 mb-3">
+                    <span class="theme-pill">Web Dev (HTML/CSS/JS)</span>
+                    <span class="theme-pill">Electrical Design</span>
+                    <span class="theme-pill">Network Cabling</span>
+                    <span class="theme-pill">3D Printing</span>
+                    <span class="theme-pill">PC Assembly</span>
+                    <span class="theme-pill">Hardware Diagnostics</span>
+                </div>
+
+                <h3 class="font-bold text-[11.5px] theme-title mb-1.5">Professional Traits</h3>
+                <div class="flex flex-wrap gap-1">
+                    <span class="theme-pill opacity-80">Entrepreneurship</span>
+                    <span class="theme-pill opacity-80">Problem-Solving</span>
+                    <span class="theme-pill opacity-80">Teaching</span>
+                    <span class="theme-pill opacity-80">Client Relations</span>
+                </div>
+            </section>
+
+            <!-- Annexes & Links -->
+            <section>
+                <h2 class="section-heading"><i class="fa-solid fa-link theme-accent text-sm"></i> Annexes & Links</h2>
+                <ul class="text-[11px] space-y-2 font-semibold theme-title opacity-90">
+                    <li class="flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-right text-[9px] theme-accent"></i>
+                        <a href="https://nicosgandurra.github.io/CuackdernosWEBSITE/" target="_blank"
+                            class="hover:opacity-70 transition-opacity decoration-2 underline-offset-2 hover:underline">Cuackdernos
+                            Official Store</a>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-right text-[9px] theme-accent"></i>
+                        <a href="https://nicosgandurra.github.io/PCScanner-TecNito/" target="_blank"
+                            class="hover:opacity-70 transition-opacity decoration-2 underline-offset-2 hover:underline">TecNito
+                            PcScanner App</a>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-right text-[9px] theme-accent"></i>
+                        <a href="https://nicosgandurra.github.io/SimCircuitosElectricos/" target="_blank"
+                            class="hover:opacity-70 transition-opacity decoration-2 underline-offset-2 hover:underline">Engineering
+                            Lab Hub</a>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+
+        <!-- ================= MAIN CONTENT ================= -->
+        <main class="theme-card animate-fade-up delay-100">
+            <div class="absolute top-0 left-0 w-full h-1.5 no-print" style="background-color: var(--border-color);">
+            </div>
+
+            <!-- Profile -->
+            <section class="mb-5 mt-2">
+                <h2 class="section-heading"><i class="fa-solid fa-user theme-accent text-sm"></i> Professional Profile
+                </h2>
+                <p class="text-hr-body text-justify">
+                    Driven <strong>5th-year Electromechanical Engineering student</strong> with a strong entrepreneurial
+                    spirit and an extensive technical background. Proven expertise in <strong>electrical installations,
+                        IT networking, and web development</strong>. Passionate about optimizing electrical systems,
+                    solving complex hardware issues, and building practical software solutions. Looking to leverage my
+                    diverse analytical and practical skill set to drive efficiency in a challenging tech or engineering
+                    role.
+                </p>
+                </ <!-- Experience Timeline -->
+                <section class="mb-6">
+                    <h2 class="section-heading"><i class="fa-solid fa-briefcase theme-accent text-sm"></i> Work
+                        Experience
+                    </h2>
+
+                    <!-- Teacher -->
+                    <div class="theme-timeline-item">
+                        <div class="theme-timeline-dot"></div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-0.5">
+                            <h3 class="font-bold theme-title text-[14px]">Teacher</h3>
+                            <span
+                                class="text-[10.5px] font-mono-custom theme-accent font-bold mt-1 md:mt-0 uppercase tracking-wide">October
+                                2021 – Present</span>
+                        </div>
+                        <h4 class="text-[12px] theme-muted font-semibold mb-1">Dirección General de Escuelas - Esc.
+                            Reynaldo Merín</h4>
+                        <ul class="list-disc list-outside ml-4 text-hr-body space-y-1">
+                            <li>Instruct "Electrical Circuits 1 & 2" for <strong>100+ students per year</strong>,
+                                achieving high engagement and developing comprehensive didactic materials.</li>
+                            <li>Provide personalized academic tutoring and on-demand technical support, resolving
+                                complex queries and significantly improving cohort comprehension and retention rates.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tec.Nito -->
+                    <div class="theme-timeline-item">
+                        <div class="theme-timeline-dot"></div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-0.5">
+                            <h3 class="font-bold theme-title text-[14px]">Owner & IT Technician</h3>
+                            <span
+                                class="text-[10.5px] font-mono-custom theme-accent font-bold mt-1 md:mt-0 uppercase tracking-wide">June
+                                2017 – Present</span>
+                        </div>
+                        <h4 class="text-[12px] theme-muted font-semibold mb-1">Tec.Nito</h4>
+                        <ul class="list-disc list-outside ml-4 text-hr-body space-y-1">
+                            <li>Execute advanced hardware diagnostics, motherboard repair, and custom high-performance
+                                PC assembly, maintaining an <strong>excellent client satisfaction rate</strong>.</li>
+                            <li>Design and implement comprehensive network infrastructures and structured cabling
+                                tailored for businesses with complex operational and security requirements.</li>
+                            <li>Lead corporate technical support, inventory management, and seamlessly merge system
+                                operations, optimizing IT workflows.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Cuackdernos -->
+                    <div class="theme-timeline-item">
+                        <div class="theme-timeline-dot"></div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-0.5">
+                            <h3 class="font-bold theme-title text-[14px]">Founder & Entrepreneur</h3>
+                            <span
+                                class="text-[10.5px] font-mono-custom theme-accent font-bold mt-1 md:mt-0 uppercase tracking-wide">March
+                                2025 – Present</span>
+                        </div>
+                        <h4 class="text-[12px] theme-muted font-semibold mb-1">Cuackdernos</h4>
+                        <ul class="list-disc list-outside ml-4 text-hr-body space-y-1">
+                            <li>Manage and optimize the full-cycle production, sales, and logistics of custom discbound
+                                notebooks, <strong>consistently scaling operations month-over-month</strong>.</li>
+                            <li>Spearhead the graphic development, UI design, and visual brand identity, engineering
+                                tailored organizational solutions for diverse clients.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Freelance -->
+                    <div class="theme-timeline-item !mb-0 border-transparent">
+                        <div class="theme-timeline-dot"></div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-0.5">
+                            <h3 class="font-bold theme-title text-[14px]">Freelance Electrical Tech.</h3>
+                            <span
+                                class="text-[10.5px] font-mono-custom theme-accent font-bold mt-1 md:mt-0 uppercase tracking-wide">2022
+                                – 2023</span>
+                        </div>
+                        <h4 class="text-[12px] theme-muted font-semibold mb-1">Independent</h4>
+                        <ul class="list-disc list-outside ml-4 text-hr-body space-y-1">
+                            <li>Executed end-to-end residential and commercial electrical installation projects from the
+                                ground up, strictly adhering to safety standards.</li>
+                            <li>Performed power load calculations, accurate dimensioning of conductors and protections,
+                                fault resolution, and system maintenance.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Bottom Section -->
+                <div class="flex flex-col gap-5">
+                    <!-- Projects -->
+                    <section>
+                        <h2 class="section-heading"><i class="fa-solid fa-code-branch theme-accent text-sm"></i>
+                            Projects
+                        </h2>
+                        <div class="space-y-3">
+                            <div class="pb-3 border-b theme-border">
+                                <h3 class="font-bold text-[13px] theme-title mb-1">Software & Web Development</h3>
+                                <p class="text-hr-body leading-relaxed">
+                                    Developed and published <strong>"TrucoScore"</strong> (PWA), architected and
+                                    engineered the <strong>Cuackdernos
+                                        E-commerce Website</strong> from scratch, and created <strong>"TecNito
+                                        PcScanner"</strong> to automate hardware diagnostics.
+                                </p>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-[13px] theme-title mb-1">Educational Engineering Tools</h3>
+                                <p class="text-hr-body leading-relaxed">
+                                    Designed interactive electrical circuit simulators, UI tools, and comprehensive
+                                    study guides tailored for
+                                    engineering students to improve practical learning.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+        </main>
+    </div>
+
+    <!-- Script to handle Theme Switching -->
+    <script>
+        function setTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+
+            const buttons = document.querySelectorAll('.theme-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('ring-2', 'ring-blue-500', 'ring-rose-400', 'scale-105', 'ring-gray-400');
+                btn.classList.add('opacity-70');
+
+                if (btn.getAttribute('data-theme-btn') === themeName) {
+                    btn.classList.remove('opacity-70');
+                    btn.classList.add('scale-105');
+
+                    if (themeName === 'executive') btn.classList.add('ring-2', 'ring-blue-500');
+                    if (themeName === 'cuackdernos') btn.classList.add('ring-2', 'ring-rose-400');
+                    if (themeName === 'vercel') btn.classList.add('ring-2', 'ring-gray-400');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
