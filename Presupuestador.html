@@ -182,10 +182,10 @@
             color: #1a1a24;
         }
 
-        /* Estructura de Tabla: 5 columnas en pantalla */
+        /* Estructura de Tabla: 6 columnas en pantalla */
         .grid-table {
             display: grid;
-            grid-template-columns: 1fr 60px 110px 130px 30px;
+            grid-template-columns: 24px 1fr 60px 110px 130px 30px;
             gap: 8px;
             align-items: start;
         }
@@ -257,6 +257,12 @@
             Tec.Nito Docs
         </h1>
         <div class="flex gap-2 sm:gap-3">
+            <button onclick="abrirHistorial()" class="p-2.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-sm bg-white dark:bg-gray-800" title="Historial de Presupuestos">
+                <i data-lucide="folder-open" class="w-5 h-5 text-blue-500"></i>
+            </button>
+            <button onclick="guardarEnHistorial()" class="p-2.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-sm bg-white dark:bg-gray-800" title="Guardar Copia en Historial">
+                <i data-lucide="save" class="w-5 h-5 text-green-500"></i>
+            </button>
             <button onclick="borrarDatos()"
                 class="p-2.5 rounded-full hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 transition-colors shadow-sm bg-white dark:bg-gray-800"
                 title="Borrar Datos y Reiniciar">
@@ -347,6 +353,7 @@
                 <!-- Cabecera -->
                 <div
                     class="grid-table border-b-[2px] border-line pb-2 mb-3 text-[11px] font-black uppercase tracking-widest opacity-50 px-1">
+                    <div class="print-hide"></div>
                     <div>Descripción</div>
                     <div class="text-center">Cant.</div>
                     <div class="text-right">Precio Un.</div>
@@ -431,9 +438,112 @@
         </div>
     </div>
 
+    <!-- Modal Historial -->
+    <div id="modal-historial" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm print-hide">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-[90%] max-w-2xl max-h-[80vh] flex flex-col shadow-2xl overflow-hidden transform transition-all">
+            <div class="p-5 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900/50">
+                <h2 class="text-xl font-bold flex items-center gap-2"><i data-lucide="folder-open" class="text-blue-500"></i> Historial de Presupuestos</h2>
+                <button onclick="cerrarHistorial()" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="p-5 flex-1 overflow-y-auto">
+                <div id="lista-historial" class="flex flex-col gap-3">
+                    <!-- Items dinámicos -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- LÓGICA JAVASCRIPT -->
     <script>
         lucide.createIcons();
+        
+        // --- SISTEMA DE HISTORIAL ---
+        const HISTORIAL_KEY = 'presupuestador_historial';
+
+        function obtenerHistorial() {
+            const historialGuardado = localStorage.getItem(HISTORIAL_KEY);
+            return historialGuardado ? JSON.parse(historialGuardado) : [];
+        }
+
+        function guardarEnHistorial() {
+            const cliente = document.getElementById('cliente-nombre').value || 'Sin Cliente';
+            const nro = document.getElementById('presupuesto-nro').value || 'S/N';
+            const total = document.getElementById('gran-total').innerText;
+            
+            let nombre = prompt("Nombre para guardar este presupuesto:", `${nro} - ${cliente}`);
+            if (!nombre) return;
+
+            // Para no duplicar código, forzamos guardarDatos() actualizando el localStorage
+            guardarDatos();
+            const datosActuales = JSON.parse(localStorage.getItem('presupuestador_datos'));
+
+            const historial = obtenerHistorial();
+            const nuevoRegistro = {
+                id: Date.now().toString(),
+                nombre: nombre,
+                fechaGuardado: new Date().toLocaleDateString('es-ES') + ' ' + new Date().toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'}),
+                total: total,
+                datos: datosActuales
+            };
+
+            historial.unshift(nuevoRegistro);
+            localStorage.setItem(HISTORIAL_KEY, JSON.stringify(historial));
+            alert('¡Presupuesto guardado en el historial!');
+        }
+
+        function abrirHistorial() {
+            const modal = document.getElementById('modal-historial');
+            const lista = document.getElementById('lista-historial');
+            modal.classList.remove('hidden');
+            
+            const historial = obtenerHistorial();
+            
+            if (historial.length === 0) {
+                lista.innerHTML = '<div class="text-center py-10 opacity-50">No hay presupuestos guardados aún.</div>';
+                return;
+            }
+
+            lista.innerHTML = historial.map(h => `
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors gap-4">
+                    <div class="flex flex-col">
+                        <span class="font-bold text-lg">${h.nombre}</span>
+                        <span class="text-xs opacity-60 flex items-center gap-1 mt-1">
+                            <i data-lucide="clock" class="w-3 h-3"></i> ${h.fechaGuardado} &nbsp;|&nbsp; <strong>${h.total}</strong>
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <button onclick="cargarDelHistorial('${h.id}')" class="flex-1 sm:flex-none px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-bold transition-colors shadow-sm">Cargar</button>
+                        <button onclick="eliminarDelHistorial('${h.id}')" class="p-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors" title="Eliminar"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                    </div>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        function cerrarHistorial() {
+            document.getElementById('modal-historial').classList.add('hidden');
+        }
+
+        function cargarDelHistorial(id) {
+            if(!confirm('¿Cargar este presupuesto? Los datos en pantalla que no hayas guardado se perderán.')) return;
+            
+            const historial = obtenerHistorial();
+            const registro = historial.find(h => h.id === id);
+            if (registro) {
+                localStorage.setItem('presupuestador_datos', JSON.stringify(registro.datos));
+                cargarDatos();
+                cerrarHistorial();
+            }
+        }
+
+        function eliminarDelHistorial(id) {
+            if(!confirm('¿Estás seguro de eliminar este presupuesto del historial?')) return;
+            let historial = obtenerHistorial();
+            historial = historial.filter(h => h.id !== id);
+            localStorage.setItem(HISTORIAL_KEY, JSON.stringify(historial));
+            abrirHistorial(); // Refrescar lista
+        }
         
         // --- SISTEMA DE DATOS Y LOCAL STORAGE ---
         let visibilidad = {
@@ -587,6 +697,7 @@
                 }
                 
                 aplicarVisibilidad();
+                setTimeout(makeDraggable, 100);
             } else {
                 document.getElementById('fecha-doc').value = obtenerFechaEspanol();
                 document.getElementById('color-picker').value = '#d6336c';
@@ -599,6 +710,7 @@
                     crearHTMLFila('servicios', 'Instalación de Sistema Operativo y backup', 1, 25000);
                 
                 aplicarVisibilidad();
+                setTimeout(makeDraggable, 100);
             }
         }
 
@@ -632,7 +744,12 @@
         function crearHTMLFila(tipo, descripcion = '', cantidad = 1, precio = 0) {
             const id = Date.now() + Math.random();
             return `
-                <div class="grid-table group py-1 fila-calculo px-1" id="fila-${id}" data-tipo="${tipo}">
+                <div class="grid-table group py-1 fila-calculo px-1 transition-all duration-200" id="fila-${id}" data-tipo="${tipo}">
+                    <div class="flex items-start justify-center print-hide pt-1">
+                        <div class="drag-handle cursor-grab active:cursor-grabbing p-1 opacity-20 group-hover:opacity-100 transition-opacity text-gray-500 hover:text-gray-800 dark:hover:text-gray-300" title="Arrastrar para reordenar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                        </div>
+                    </div>
                     <div>
                         <textarea class="cuack-input font-semibold auto-resize text-sm sm:text-base" placeholder="Descripción del ítem..." oninput="autoResize(this)" rows="1">${descripcion}</textarea>
                     </div>
@@ -660,7 +777,103 @@
             setTimeout(() => {
                 calcularTodo();
                 guardarDatos();
+                makeDraggable();
             }, 50);
+        }
+
+        let draggedRow = null;
+
+        function handleDragStart(e) {
+            if (!e.target.closest('.fila-calculo')) return;
+            draggedRow = e.target.closest('.fila-calculo');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', '');
+            setTimeout(() => draggedRow.classList.add('opacity-50'), 0);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            const overRow = e.target.closest('.fila-calculo');
+            if (!overRow || overRow === draggedRow) return;
+            
+            const bounding = overRow.getBoundingClientRect();
+            const offset = bounding.y + (bounding.height / 2);
+            if (e.clientY - offset > 0) {
+                overRow.style.borderBottom = "2px solid var(--accent-light)";
+                overRow.style.borderTop = "";
+            } else {
+                overRow.style.borderTop = "2px solid var(--accent-light)";
+                overRow.style.borderBottom = "";
+            }
+        }
+
+        function handleDragLeave(e) {
+            const overRow = e.target.closest('.fila-calculo');
+            if (overRow) {
+                overRow.style.borderTop = "";
+                overRow.style.borderBottom = "";
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const overRow = e.target.closest('.fila-calculo');
+            if (overRow) {
+                overRow.style.borderTop = "";
+                overRow.style.borderBottom = "";
+            }
+            
+            if (!overRow || overRow === draggedRow || overRow.parentNode !== draggedRow.parentNode) return;
+
+            const bounding = overRow.getBoundingClientRect();
+            const offset = bounding.y + (bounding.height / 2);
+            
+            const container = draggedRow.parentNode;
+            if (e.clientY - offset > 0) {
+                container.insertBefore(draggedRow, overRow.nextSibling);
+            } else {
+                container.insertBefore(draggedRow, overRow);
+            }
+            guardarDatos();
+        }
+
+        function handleDragEnd(e) {
+            if (draggedRow) {
+                draggedRow.classList.remove('opacity-50');
+            }
+            document.querySelectorAll('.fila-calculo').forEach(row => {
+                row.style.borderTop = "";
+                row.style.borderBottom = "";
+            });
+            draggedRow = null;
+        }
+
+        function makeDraggable() {
+            document.querySelectorAll('.drag-handle').forEach(handle => {
+                handle.addEventListener('mousedown', () => {
+                    handle.closest('.fila-calculo').setAttribute('draggable', 'true');
+                });
+                handle.addEventListener('mouseup', () => {
+                    handle.closest('.fila-calculo').setAttribute('draggable', 'false');
+                });
+                handle.addEventListener('mouseleave', () => {
+                    handle.closest('.fila-calculo').setAttribute('draggable', 'false');
+                });
+            });
+
+            document.querySelectorAll('.fila-calculo').forEach(row => {
+                row.removeEventListener('dragstart', handleDragStart);
+                row.removeEventListener('dragover', handleDragOver);
+                row.removeEventListener('dragleave', handleDragLeave);
+                row.removeEventListener('drop', handleDrop);
+                row.removeEventListener('dragend', handleDragEnd);
+
+                row.addEventListener('dragstart', handleDragStart);
+                row.addEventListener('dragover', handleDragOver);
+                row.addEventListener('dragleave', handleDragLeave);
+                row.addEventListener('drop', handleDrop);
+                row.addEventListener('dragend', handleDragEnd);
+            });
         }
 
         function eliminarFila(id) {
